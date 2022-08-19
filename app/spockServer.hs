@@ -87,12 +87,13 @@ main = do
   spockCfg <- config EmptySession PCNoDatabase (DummyAppState ())
   runSpock 8080 (spock spockCfg app)
 
-fftrim :: T.Text -> T.Text -> T.Text -> IO T.Text
-fftrim start stop input =
+fftrim :: T.Text -> T.Text -> T.Text -> T.Text -> IO T.Text
+fftrim start stop input outFileWantedName =
   let
     (fileHeader, _) = splitExtension (T.unpack input)
+    (trimOutFileWant, _) = splitExtension (T.unpack outFileWantedName)
     timeMillis      = show . round <$> getPOSIXTime
-    outFileName tm = "trimmed_" ++ fileHeader ++ "_" ++ tm ++ ".mp3"
+    outFileName tm = if T.length (T.strip trimOutFileWant) == 0 then ("trimmed_" ++ fileHeader ++ "_" ++ tm ++ ".mp3") else trimOutFileWant ++ "_" ++ tm ++ ".mp3"
     startRay =
       if T.length (T.strip start) == 0 then [] else ["-ss", T.unpack start]
     stopRay =
@@ -123,7 +124,8 @@ app = do
               removeFile (uf_tempLocation f)
               let startTimestamp = fromMaybe "" $ lookup "start" ps
               let stopTimestamp  = fromMaybe "" $ lookup "stop" ps
-              outFile <- fftrim startTimestamp stopTimestamp fileName
+              let wantedOutFile = fromMaybe "" $ lookup "fileName" ps
+              outFile <- fftrim startTimestamp stopTimestamp fileName wantedOutFile
               copyFile
                 (T.unpack outFile)
                 ("/home/sspeaks/pogbot/assets/audio/" ++ T.unpack outFile)
