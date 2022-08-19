@@ -93,7 +93,7 @@ fftrim start stop input outFileWantedName =
     (fileHeader, _) = splitExtension (T.unpack input)
     (trimOutFileWant, _) = splitExtension (T.unpack outFileWantedName)
     timeMillis      = show . round <$> getPOSIXTime
-    outFileName tm = if T.length (T.strip trimOutFileWant) == 0 then ("trimmed_" ++ fileHeader ++ "_" ++ tm ++ ".mp3") else (trimOutFileWant ++ "_" ++ tm ++ ".mp3")
+    outFileName tm = if T.length (T.strip (T.pack trimOutFileWant)) == 0 then ("trimmed_" ++ fileHeader ++ "_" ++ tm ++ ".mp3") else (trimOutFileWant ++ "_" ++ tm ++ ".mp3")
     startRay =
       if T.length (T.strip start) == 0 then [] else ["-ss", T.unpack start]
     stopRay =
