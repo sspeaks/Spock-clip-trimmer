@@ -1,64 +1,31 @@
-
-
-
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
-import           Control.Monad.Trans            ( MonadIO(liftIO) )
-import qualified Data.HashMap.Lazy             as HM
-import           Data.IORef                     ( IORef
-                                                , atomicModifyIORef'
-                                                , newIORef
-                                                )
-import           Data.Maybe                     ( fromJust
-                                                , fromMaybe
-                                                )
-import qualified Data.Text                     as T
-import qualified Data.Text.Encoding            as T
-import qualified Data.Text.IO                  as TO
-import           Data.Time.Clock.POSIX          ( getPOSIXTime )
-import           Data.Traversable               ( forM )
-import           Network.HTTP.Types             ( Status
-                                                  ( statusCode
-                                                  , statusMessage
-                                                  )
-                                                )
-import           System.Directory               ( copyFile
-                                                , removeFile
-                                                )
-import           System.EasyFile                ( splitExtension )
-import           System.IO                      ( stderr )
-import           System.Process                 ( callProcess )
-import           Web.Spock                      ( (<//>)
-                                                , ActionCtxT
-                                                , CookieEOL
-                                                  ( CookieValidForSession
-                                                  , CookieValidForever
-                                                  )
-                                                , HasSpock(getState)
-                                                , SpockM
-                                                , UploadedFile
-                                                  ( uf_name
-                                                  , uf_tempLocation
-                                                  )
-                                                , clearAllSessions
-                                                , files
-                                                , html
-                                                , params
-                                                , post
-                                                , root
-                                                , runSpock
-                                                , spock
-                                                , text
-                                                , var
-                                                )
-import           Web.Spock.Config               ( PoolOrConn(PCNoDatabase)
-                                                , SessionCfg(..)
-                                                , SpockCfg(..)
-                                                , defaultSessionHooks
-                                                , defaultSpockCfg
-                                                , newStmSessionStore
-                                                )
+import           Control.Monad.Trans   (MonadIO (liftIO))
+import qualified Data.HashMap.Lazy     as HM
+import           Data.IORef            (IORef, atomicModifyIORef', newIORef)
+import           Data.Maybe            (fromJust, fromMaybe)
+import qualified Data.Text             as T
+import qualified Data.Text.Encoding    as T
+import qualified Data.Text.IO          as TO
+import           Data.Time.Clock.POSIX (getPOSIXTime)
+import           Data.Traversable      (forM)
+import           Network.HTTP.Types    (Status (statusCode, statusMessage))
+import           System.Directory      (copyFile, removeFile)
+import           System.EasyFile       (splitExtension)
+import           System.IO             (stderr)
+import           System.Process        (callProcess)
+import           Web.Spock             (ActionCtxT,
+                                        CookieEOL (CookieValidForSession, CookieValidForever),
+                                        HasSpock (getState), SpockM,
+                                        UploadedFile (uf_name, uf_tempLocation),
+                                        clearAllSessions, files, html, params,
+                                        post, root, runSpock, spock, text, var,
+                                        (<//>))
+import           Web.Spock.Config      (PoolOrConn (PCNoDatabase),
+                                        SessionCfg (..), SpockCfg (..),
+                                        defaultSessionHooks, defaultSpockCfg,
+                                        newStmSessionStore)
 
 
 myDefaultSessionCfg :: a -> IO (SessionCfg conn a st)
@@ -165,8 +132,3 @@ app = do
               return outFile
     clearAllSessions
     text "Okay"
-
-
-
-
-
