@@ -154,8 +154,8 @@ app = do
               let fileName = uf_name f
               copyFile (uf_tempLocation f) ("./" ++ T.unpack fileName)
               removeFile (uf_tempLocation f)
-              let startTimestamp = fromJust $ lookup "start" ps
-              let stopTimestamp  = fromJust $ lookup "stop" ps
+              let startTimestamp = fromMaybe "" $ lookup "start" ps
+              let stopTimestamp  = fromMaybe "" $ lookup "stop" ps
               outFile <- fftrim startTimestamp stopTimestamp fileName
               copyFile
                 (T.unpack outFile)
