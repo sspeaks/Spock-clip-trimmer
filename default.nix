@@ -1,5 +1,2 @@
-let
-  pkgs = import <nixpkgs> { };
-
-in
-  pkgs.haskellPackages.callPackage ./spockServer.nix { }
+{pkgs,...}:
+pkgs.haskellPackages.callPackage ./spock.nix {}
