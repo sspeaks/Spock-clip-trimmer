@@ -1,6 +1,6 @@
 { pkgs, ... }:
 let
-  spockPackage = pkgs.callPackage ./default.nix {};
+  spockPackage = pkgs.callPackage ./default.nix { };
 in
 {
   systemd.services.pogspock = {
